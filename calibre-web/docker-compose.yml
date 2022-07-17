@@ -1,0 +1,35 @@
+---
+version: "2.1"
+services:
+  calibre-web:
+    image: lscr.io/linuxserver/calibre-web:latest
+    container_name: calibre
+    hostname: calibre
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+      - DOCKER_MODS=linuxserver/mods:universal-calibre #optional
+    volumes:
+      - ./calibre-web-config:/config
+      - ./books:/books
+    restart: unless-stopped
+  tailscaled:
+    image: tailscale/tailscale
+      #hostname: calibre
+    container_name: tailscaled-calibre
+    restart: unless-stopped
+    environment:
+      - TS_STATE_DIR=/var/lib/tailscale
+    volumes:
+      - /dev/net/tun:/dev/net/tun
+      - ./tailscaledata:/var/lib/tailscale
+    network_mode: "container:calibre"
+  nginx:
+    image: nginx
+    container_name: nginx-calibre
+    restart: unless-stopped
+    network_mode: "container:calibre"
+    volumes:
+      - ./nginxdata/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginxdata/certs:/etc/ssl/
