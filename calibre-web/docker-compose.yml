@@ -16,7 +16,6 @@ services:
     restart: unless-stopped
   tailscaled:
     image: tailscale/tailscale
-      #hostname: calibre
     container_name: tailscaled-calibre
     restart: unless-stopped
     environment:
@@ -33,3 +32,4 @@ services:
     volumes:
       - ./nginxdata/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginxdata/certs:/etc/ssl/
+
