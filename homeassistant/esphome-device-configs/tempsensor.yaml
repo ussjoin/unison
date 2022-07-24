@@ -1,0 +1,26 @@
+esphome:
+  name: tempsensor-nursery
+
+esp32:
+  board: lolin_d32
+  framework:
+    type: arduino
+
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+
+sensor:
+  - platform: sht3xd
+    temperature:
+      name: "Place Temperature"
+    humidity:
+      name: "Place Humidity"
+    update_interval: 2s
+
+deep_sleep:
+  run_duration: 10s
+  sleep_duration: 5min
+
+# Enable logging
+logger:

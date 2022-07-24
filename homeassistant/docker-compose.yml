@@ -1,0 +1,22 @@
+version: '3'
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    environment:
+      - TZ=America/Los_Angeles
+    volumes:
+      - ./homeassistant-data:/config
+    restart: unless-stopped
+    network_mode: host
+  esphome:
+    container_name: esphome
+    image: esphome/esphome
+    volumes:
+      - ./esphome-data:/config
+      - /etc/localtime:/etc/localtime:ro
+    # devices:
+      # - /dev/ttyUSB0:/dev/ttyUSB0
+    restart: unless-stopped
+    network_mode: host
+
