@@ -13,7 +13,7 @@ docker exec tailscaled-${SERVICE_NAME} tailscale cert --cert-file /var/lib/tails
 docker exec tailscaled-${SERVICE_NAME} chown `id -u`:`id -g` /var/lib/tailscale/${SERVICE_NAME}.${DOMAIN}.key /var/lib/tailscale/${SERVICE_NAME}.${DOMAIN}.crt
 
 mkdir -p ./nginxdata/certs/
-mv ./tailscaledata/${SERVICE_NAME}.${DOMAIN}.* ./nginxdata/certs/
+sudo mv ./tailscaledata/${SERVICE_NAME}.${DOMAIN}.* ./nginxdata/certs/
 
 # nginx container uses uid/gid 101
 sudo chown -R 101:101 ./nginxdata/certs
