@@ -10,4 +10,50 @@ automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
 
+# To enable energy calculations
+recorder:
+  auto_purge: true
+  auto_repack: true
+  purge_keep_days: 35
+
+# InfluxDB
+influxdb:
+  exclude: # Don't send data to Influx
+    entity_globs: "*"
+  host: localhost
+  port: 37678
+  bucket: homepower
+  api_version: 2
+  token: !secret influx_auth
+  organization: !secret influx_org
+  ssl: false
+
+# With thanks to https://community.home-assistant.io/t/iotawatt-influxdb-home-assistant-energy-panel/332220
+# and https://community.home-assistant.io/t/integration-influx-db-data-to-ha-energy-dashboard/337091
+# Note: you can use a read-only token for Influx, but it'll cause an error on startup.
+# Won't hurt anything.
+sensor:
+  - platform: influxdb
+    api_version: 2
+    ssl: false
+    organization: !secret influx_org
+    token: !secret influx_auth
+    bucket: homepower
+    host: localhost
+    port: 37678
+    queries_flux:
+      - name: "Total Power Consumption"
+        unique_id: total_power_consumption
+        unit_of_measurement: kWh
+        query: >
+            aggregateWindow(every: 60s, fn: sum)
+            |> filter(fn: (r) => r["_measurement"] == "main_total_kwh")
+
+homeassistant:
+  customize:
+    sensor.total_power_consumption:
+      state_class: measurement
+      device_class: energy
+      last_reset: '1970-01-01T00:00:00+00:00'
+
 template: !include nursery_aqi.yaml
