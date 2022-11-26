@@ -11,8 +11,6 @@ services:
       - ./caddy-file/Caddyfile:/etc/caddy/Caddyfile
       - ./tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
     restart: unless-stopped
-    ports:
-      - "8111:443"
   tailscaled:
     image: tailscale/tailscale:latest
     container_name: tailscaled-pocorgtfo
