@@ -22,14 +22,16 @@ services:
       - TS_STATE_DIR=/var/lib/tailscale
     volumes:
       - /dev/net/tun:/dev/net/tun
-      - ./tailscaledata:/var/lib/tailscale
+      - ./tailscale-data:/var/lib/tailscale
+      - ./tailscale-tmp:/tmp #To let Caddy speak to TS for TLS
     network_mode: "container:calibre"
-  nginx:
-    image: nginx
-    container_name: nginx-calibre
+  caddy-calibre:
+    image: caddy:alpine
+    container_name: caddy-calibre
     restart: unless-stopped
     network_mode: "container:calibre"
     volumes:
-      - ./nginxdata/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginxdata/certs:/etc/ssl/
-
+      - ./caddy-data:/data
+      - ./caddy-config:/config
+      - ./caddy-file/Caddyfile:/etc/caddy/Caddyfile
+      - ./tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
