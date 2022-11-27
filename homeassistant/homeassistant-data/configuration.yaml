@@ -46,14 +46,19 @@ sensor:
         unique_id: total_power_consumption
         unit_of_measurement: kWh
         query: >
-            aggregateWindow(every: 60s, fn: sum)
+            aggregateWindow(every: 300s, fn: sum)
             |> filter(fn: (r) => r["_measurement"] == "main_total_kwh")
+            |> keep(columns: ["_time", "_value"])
 
 homeassistant:
   customize:
     sensor.total_power_consumption:
       state_class: measurement
       device_class: energy
+      last_reset: '1970-01-01T00:00:00+00:00'
+    sensor.nursery_aqi:
+      state_class: measurement
+      device_class: air_quality
       last_reset: '1970-01-01T00:00:00+00:00'
 
 template: !include nursery_aqi.yaml
