@@ -1,0 +1,29 @@
+version: '3'
+services:
+  power-influx:
+    container_name: power-influx
+    image: "influxdb:alpine"
+    volumes:
+      - ./influxdb-data:/var/lib/influxdb2
+      - ./influxdb-config:/etc/influxdb2
+    restart: unless-stopped
+    labels:
+      - "traefik.http.routers.power-influx.rule=(ClientIP(`192.168.86.250`) || ClientIP(`192.168.86.20`) || ClientIP(`192.168.90.12`) || ClientIP(`192.168.90.11`) || Host(`localhost`))"
+      - "traefik.http.services.power-influx.loadbalancer.server.port=8086"
+      - "traefik.http.routers.power-influx.entrypoints=infl"
+      - "traefik.enable=true"
+  traefik:
+    image: traefik:latest
+    container_name: traefik-power
+    restart: unless-stopped
+    command: 
+      #- "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.infl.address=:37678"
+    ports:
+      #- "8080:8080" #webui
+      - "37678:37678"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
