@@ -1,0 +1,1206 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_POWERDATA",
+      "label": "Powerdata",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "pluginName": "InfluxDB"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "10.1.2"
+    },
+    {
+      "type": "datasource",
+      "id": "influxdb",
+      "name": "InfluxDB",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "piechart",
+      "name": "Pie chart",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_POWERDATA}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "afton_room_wh": {
+                  "index": 5,
+                  "text": "Afton's Room"
+                },
+                "dishwasher_wh": {
+                  "index": 16,
+                  "text": "Dishwasher"
+                },
+                "dryer_total_wh": {
+                  "index": 9,
+                  "text": "Dryer"
+                },
+                "family_rear_outlet_wh": {
+                  "index": 13,
+                  "text": "Family Room Rear"
+                },
+                "fridge_wh": {
+                  "index": 19,
+                  "text": "Fridge"
+                },
+                "furnace_wh": {
+                  "index": 0,
+                  "text": "Furnace (Old)"
+                },
+                "garage_freezer_wh": {
+                  "index": 3,
+                  "text": "Garage Freezer and Car"
+                },
+                "garage_left_wh": {
+                  "index": 7,
+                  "text": "Garage Left Outlet"
+                },
+                "garage_overhead_wh": {
+                  "index": 6,
+                  "text": "Garage Overhead"
+                },
+                "garage_right_wh": {
+                  "index": 12,
+                  "text": "Garage Left Outlet"
+                },
+                "garbage_disposal_wh": {
+                  "index": 15,
+                  "text": "Garbage Disposal"
+                },
+                "hvac_wh": {
+                  "index": 22,
+                  "text": "HVAC"
+                },
+                "kitchen_outlets_wh": {
+                  "index": 10,
+                  "text": "Kitchen Outlets"
+                },
+                "laundry_lights_wh": {
+                  "index": 14,
+                  "text": "Laundry Lights"
+                },
+                "livingroom_microwave_wh": {
+                  "index": 2,
+                  "text": "Living Room, Microwave"
+                },
+                "office_guest_tv_wh": {
+                  "index": 1,
+                  "text": "Office, Guest Room, TV"
+                },
+                "primary_bedroom_wh": {
+                  "index": 4,
+                  "text": "Primary Bedroom"
+                },
+                "sauna_total_wh": {
+                  "index": 8,
+                  "text": "Sauna"
+                },
+                "stove240_wh": {
+                  "index": 20,
+                  "text": "Stove"
+                },
+                "stove_wh": {
+                  "index": 11,
+                  "text": "Stove (Old)"
+                },
+                "unknown_14_wh": {
+                  "index": 17,
+                  "text": "Unknown (1_14)"
+                },
+                "unknown_2_10_wh": {
+                  "index": 18,
+                  "text": "Unknown (2_10)"
+                },
+                "water_heater_wh": {
+                  "index": 21,
+                  "text": "Water Heater"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "unit": "watth"
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "_value"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 11,
+        "x": 0,
+        "y": 0
+      },
+      "id": 6,
+      "options": {
+        "displayLabels": [],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^_value$/",
+          "values": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_POWERDATA}"
+          },
+          "query": "import \"strings\"\nfrom(bucket: \"homepower\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => strings.containsStr(v:r._measurement, substr: \"_wh\") and r[\"_measurement\"] != \"main_total_wh\")\n  |> aggregateWindow(every: 30m, fn: sum, createEmpty: false)\n  |> sum(column: \"_value\")\n  |> group()\n  |> drop(columns: [\"_field\", \"_start\", \"_stop\", \"watt1\", \"watt2\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "Circuit Power Consumption",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_POWERDATA}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "watth"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 11,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.1.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_POWERDATA}"
+          },
+          "query": "from(bucket: \"homepower\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> aggregateWindow(every: 15m, fn: sum)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"${selected_power_source}\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Power Consumption by Selected",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "reduceRow",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_POWERDATA}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "kwatth"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 11,
+        "y": 6
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.1.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_POWERDATA}"
+          },
+          "query": "from(bucket: \"homepower\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> aggregateWindow(every: 60m, fn: sum)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"main_total_kwh\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Total Power Consumption in Period",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "reduceRow",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_POWERDATA}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "watt"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "afton_room value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Afton's Room"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fridge value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Fridge"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "watt1_volts value"
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": true,
+                  "viz": true
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "watt2_volts value"
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": true,
+                  "viz": true
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "furnace value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Furnace"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#f3f0f030",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "garage_freezer value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Garage Freezer and Car"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "livingroom_microwave value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Living Room, Microwave"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "office_guest_tv value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Brendan's Office, Guest Room, TV"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "primary_bedroom value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Primary Bedroom"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "laundry_lights value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Laundry Lights"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "main_total value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total Power Usage"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "kitchen_outlets value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Kitchen Outlets"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dryer_total value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Dryer"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "garage_overhead value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Garage Overhead"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "family_rear_outlet value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Family Room Rear"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dishwasher value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Dishwasher"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "stove value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Stove"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "garbage_disposal value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Garbage Disposal"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "garage_left value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Garage Left"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_POWERDATA}"
+          },
+          "query": "from(bucket: \"homepower\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] != \"dryer_total\" and r[\"_measurement\"] != \"main_total\" and r[\"_measurement\"] != \"sauna_total\" and r[\"_measurement\"] != \"stove240\" and r[\"_measurement\"] != \"water_heater\" and r[\"_measurement\"] != \"hvac\" and r[\"_measurement\"] != \"watt1_hz\" and r[\"_measurement\"] != \"watt2_hz\")\n  |> aggregateWindow(every: 60s, fn: mean)\n  |> filter(fn: (r) => r[\"_value\"] > 50)\n  |> drop(columns: [\"watt1\", \"watt2\"])\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Power Usage 120v",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_POWERDATA}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "watt"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dryer_total value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Dryer"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sauna_total value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Sauna"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "main_total value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Main"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "stove240 value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Stove"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "hvac value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "HVAC"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "water_heater value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Water Heater"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_POWERDATA}"
+          },
+          "query": "from(bucket: \"homepower\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"dryer_total\" or r[\"_measurement\"] == \"main_total\" or r[\"_measurement\"] == \"sauna_total\" or r[\"_measurement\"] == \"stove240\" or r[\"_measurement\"] == \"water_heater\" or r[\"_measurement\"] == \"hvac\")\n  |> drop(columns: [\"watt1\", \"watt2\"])\n  |> aggregateWindow(every: 60s, fn: mean)\n  \n",
+          "refId": "A"
+        }
+      ],
+      "title": "Power Usage 240v",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_POWERDATA}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "watth"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "value watt1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Power Consumption"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 32
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_POWERDATA}"
+          },
+          "query": "from(bucket: \"homepower\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"main_total_wh\")\n  |> aggregateWindow(every: 60s, fn: sum)\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Whole-House Per-Minute Power Consumption in Wh",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_POWERDATA}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "kwatth"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dryer_total value watt1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Dryer"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sauna_total value watt1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Sauna"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "main_total value watt1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Main"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 39
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_POWERDATA}"
+          },
+          "query": "from(bucket: \"homepower\")\n  |> range(start: -30d, stop: now())\n  |> filter(fn: (r) => r[\"_measurement\"] == \"main_total_kwh\")\n  |> aggregateWindow(every: 24h, fn: sum)\n  \n",
+          "refId": "A"
+        }
+      ],
+      "title": "Whole House Usage (30d)",
+      "transformations": [],
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "",
+  "revision": 1,
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {},
+        "datasource": {
+          "type": "influxdb",
+          "uid": "${DS_POWERDATA}"
+        },
+        "definition": "import \"influxdata/influxdb/v1\"\nv1.measurements(bucket: v.bucket)",
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "selected_power_source",
+        "options": [],
+        "query": "import \"influxdata/influxdb/v1\"\nv1.measurements(bucket: v.bucket)",
+        "refresh": 1,
+        "regex": "/_wh/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-12h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "",
+  "title": "Power Usage Dashboard",
+  "uid": "Q3u5WnIVz",
+  "version": 17,
+  "weekStart": ""
+}
