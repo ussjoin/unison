@@ -18,6 +18,8 @@ services:
     image: tailscale/tailscale
     container_name: tailscaled-calibre
     restart: unless-stopped
+    depends_on:
+      - calibre-web
     environment:
       - TS_STATE_DIR=/var/lib/tailscale
     volumes:
@@ -29,6 +31,8 @@ services:
     image: caddy:alpine
     container_name: caddy-calibre
     restart: unless-stopped
+    depends_on:
+      - calibre-web
     network_mode: "container:calibre"
     volumes:
       - ./caddy-data:/data
