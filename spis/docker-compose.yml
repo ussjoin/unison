@@ -1,0 +1,33 @@
+# To bring the tailscale funnel online:
+# 1. docker compose up (no -d)
+# 2. The tailscale container on first start will display a URL to join the
+#    container to the tailnet. Open the URL and authenticate the container.
+# 3. Disable key expiry for the container.
+# 4. docker exec -ti tailscaled-spis /bin/sh
+# 5. In that session, run tailscale funnel -bg --https=443 http://localhost:8080
+# 6. This will bring the funnel online and make it persistent. If you need to
+#    debug the funnel, drop the -bg to put it in foreground mode.
+version: '3'
+services:
+  spis:
+    container_name: spis
+    hostname: imagehost
+    image: ghcr.io/gbbirkisson/spis
+    environment:
+      - SPIS_PROCESSING_RUN_ON_START=true
+    volumes:
+      - ./photos:/var/lib/spis/media
+      - ./spis-data:/var/lib/spis/data
+    restart: unless-stopped
+  tailscaled:
+    image: tailscale/tailscale:latest
+    container_name: tailscaled-spis
+    restart: unless-stopped
+    environment:
+      - TS_STATE_DIR=/var/lib/tailscale/
+    volumes:
+      - /dev/net/tun:/dev/net/tun
+      - ./tailscale-data:/var/lib/tailscale
+    network_mode: "container:spis"
+
+
