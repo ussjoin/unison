@@ -1,0 +1,23 @@
+version: '3'
+services:
+  rtlais:
+    container_name: rtlais
+    hostname: rtlais
+    image: rtlais
+    build: ./rtlais
+    restart: unless-stopped
+    devices:
+      - /dev/bus/usb/003/007:/dev/bus/usb/003/007
+  # tailscaled:
+  #   image: tailscale/tailscale:latest
+  #   container_name: tailscaled-pocorgtfo
+  #   restart: unless-stopped
+  #   environment:
+  #     - TS_STATE_DIR=/var/lib/tailscale/
+  #   volumes:
+  #     - /dev/net/tun:/dev/net/tun
+  #     - ./tailscale-tmp:/tmp #To let Caddy speak to TS for TLS
+  #     - ./tailscale-data:/var/lib/tailscale
+  #   network_mode: "container:pocorgtfo"
+
+
