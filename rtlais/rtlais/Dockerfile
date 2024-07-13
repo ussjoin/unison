@@ -8,7 +8,8 @@ RUN apk add \
   librtlsdr-dev \
   libusb \
   git \
-  build-base
+  build-base \
+  supervisor
 
 WORKDIR /tmp
 RUN git clone https://github.com/dgiardini/rtl-ais.git && \
@@ -23,6 +24,6 @@ RUN git clone https://github.com/dgiardini/rtl-ais.git && \
   cp ./kplex /app/
 
 COPY ./files/kplex.conf /etc/kplex.conf
+COPY ./files/supervisor.conf /etc/supervisor.conf
 
-CMD /app/rtl_ais -n
-
+CMD supervisord -c /etc/supervisor.conf
