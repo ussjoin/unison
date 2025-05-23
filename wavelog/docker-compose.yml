@@ -1,0 +1,51 @@
+# To bring the tailscale funnel online:
+# 1. docker compose up (no -d)
+# 2. The tailscale container on first start will display a URL to join the
+#    container to the tailnet. Open the URL and authenticate the container.
+# 3. Disable key expiry for the container.
+# 4. docker exec -ti tailscaled-wavelog /bin/sh
+# 5. In that session, run tailscale funnel -bg --https=443 http://localhost:80
+# 6. This will bring the funnel online and make it persistent. If you need to
+#    debug the funnel, drop the -bg to put it in foreground mode.
+
+services:
+  wavelog-db:
+    image: mariadb:11.3
+    container_name: wavelog-db
+    environment:
+      MARIADB_RANDOM_ROOT_PASSWORD: yes
+      MARIADB_DATABASE: wavelog
+      MARIADB_USER: wavelog
+      MARIADB_PASSWORD_HASH: "*03403BCD8A2E6279D2D116639DE31E81170A2EAF"
+    volumes:
+      - ./wavelog-dbdata:/var/lib/mysql
+      - ./wavelog-backup:/backup
+    restart: unless-stopped
+
+  wavelog-main:
+    container_name: wavelog-main
+    hostname: wavelog
+    image: ghcr.io/wavelog/wavelog:latest
+    depends_on:
+      - wavelog-db
+    environment:
+      CI_ENV: docker
+    volumes:
+      - ./wavelog-config:/var/www/html/application/config/docker
+      - ./wavelog-uploads:/var/www/html/uploads
+      - ./wavelog-userdata:/var/www/html/userdata
+    restart: unless-stopped
+
+  tailscaled:
+    image: tailscale/tailscale:latest
+    container_name: tailscaled-wavelog
+    restart: unless-stopped
+    environment:
+      - TS_STATE_DIR=/var/lib/tailscale/
+    volumes:
+      - /dev/net/tun:/dev/net/tun
+      - ./tailscale-data:/var/lib/tailscale
+    network_mode: "container:wavelog-main"
+    depends_on:
+      - wavelog-main
+
