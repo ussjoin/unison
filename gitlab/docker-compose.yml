@@ -1,0 +1,47 @@
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:18.0.1-ce.0
+    container_name: gitlab
+    restart: always
+    hostname: 'gitlab'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        # Add any other gitlab.rb configuration here, each on its own line
+        gitlab_rails['lfs_enabled'] = true;
+        external_url 'http://localhost:81'
+    volumes:
+      - ./gitlab-config:/etc/gitlab
+      - ./gitlab-logs:/var/log/gitlab
+      - ./gitlab-data:/var/opt/gitlab
+    shm_size: '256m'
+  tailscaled:
+    image: tailscale/tailscale
+    container_name: tailscaled-gitlab
+    restart: unless-stopped
+    depends_on:
+      - gitlab
+    environment:
+      - TS_STATE_DIR=/var/lib/tailscale
+    volumes:
+      - /dev/net/tun:/dev/net/tun
+      - ./tailscale-data:/var/lib/tailscale
+      - ./tailscale-tmp:/tmp #To let Caddy speak to TS for TLS
+    network_mode: "container:gitlab"
+  caddy-gitlab:
+    image: caddy:alpine
+    container_name: caddy-gitlab
+    restart: unless-stopped
+    depends_on:
+      - gitlab
+    network_mode: "container:gitlab"
+    volumes:
+      - ./caddy-data:/data
+      - ./caddy-config:/config
+      - ./caddy-file/Caddyfile:/etc/caddy/Caddyfile
+      - ./tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
+  gitlab-runner:
+    image: gitlab/gitlab-runner:latest
+    container_name: gitlab-runner
+    restart: always
+    volumes:
+      - ./gitlab-runner:/etc/gitlab-runner
