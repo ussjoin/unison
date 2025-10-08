@@ -1,0 +1,23 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto
+    restart: always
+    hostname: 'mosquitto'
+    volumes:
+      - ./mosquitto-config:/mosquitto/config
+      - ./mosquitto-data:/mosquitto/data
+    shm_size: '256m'
+  tailscaled:
+    image: tailscale/tailscale
+    container_name: tailscaled-mosquitto
+    restart: unless-stopped
+    depends_on:
+      - mosquitto
+    environment:
+      - TS_STATE_DIR=/var/lib/tailscale
+    volumes:
+      - /dev/net/tun:/dev/net/tun
+      - ./tailscale-data:/var/lib/tailscale
+    network_mode: "container:mosquitto"
+
