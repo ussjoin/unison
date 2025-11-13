@@ -2,11 +2,11 @@ version: '3'
 services:
   power-influx:
     container_name: power-influx
-    image: "influxdb:alpine"
+    image: "influxdb:2-alpine"
     volumes:
       - ./influxdb-data:/var/lib/influxdb2
       - ./influxdb-config:/etc/influxdb2
-    restart: unless-stopped
+    restart: always
     labels:
       - "traefik.http.routers.power-influx.rule=(ClientIP(`192.168.86.250`) || ClientIP(`192.168.86.20`) || ClientIP(`192.168.90.12`) || ClientIP(`192.168.90.11`) || Host(`influxdb.hippo-acoustic.ts.net`) || Host(`localhost`))"
       - "traefik.http.services.power-influx.loadbalancer.server.port=8086"
@@ -15,7 +15,7 @@ services:
   tailscale-power:
     image: tailscale/tailscale
     container_name: tailscaled-power
-    restart: unless-stopped
+    restart: always
     depends_on:
       - traefik
     environment:
@@ -30,7 +30,7 @@ services:
     image: traefik:latest
     container_name: traefik-power
     hostname: influxdb
-    restart: unless-stopped
+    restart: always
     command:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
