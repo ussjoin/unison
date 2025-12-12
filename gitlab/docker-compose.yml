@@ -8,7 +8,9 @@ services:
       GITLAB_OMNIBUS_CONFIG: |
         # Add any other gitlab.rb configuration here, each on its own line
         gitlab_rails['lfs_enabled'] = true;
+        gitlab_rails['registry_enabled'] = true;
         external_url 'http://localhost:81'
+        registry_external_url 'http://localhost:5002'
     volumes:
       - ./gitlab-config:/etc/gitlab
       - ./gitlab-logs:/var/log/gitlab
@@ -17,7 +19,7 @@ services:
   tailscaled:
     image: tailscale/tailscale
     container_name: tailscaled-gitlab
-    restart: unless-stopped
+    restart: always
     depends_on:
       - gitlab
     environment:
@@ -30,7 +32,7 @@ services:
   caddy-gitlab:
     image: caddy:alpine
     container_name: caddy-gitlab
-    restart: unless-stopped
+    restart: always
     depends_on:
       - gitlab
     network_mode: "container:gitlab"
@@ -40,8 +42,10 @@ services:
       - ./caddy-file/Caddyfile:/etc/caddy/Caddyfile
       - ./tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
   gitlab-runner:
-    image: gitlab/gitlab-runner:latest
+    image: gitlab/gitlab-runner:alpine
     container_name: gitlab-runner
     restart: always
     volumes:
       - ./gitlab-runner:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+
