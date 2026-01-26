@@ -5,13 +5,13 @@ services:
     hostname: rtlais
     image: rtlais
     build: ./rtlais
-    restart: unless-stopped
+    restart: always
     devices:
-      - /dev/bus/usb/003/007:/dev/bus/usb/003/007
+      - /dev/bus/usb/001/004:/dev/bus/usb/001/004
   # tailscaled:
   #   image: tailscale/tailscale:latest
   #   container_name: tailscaled-pocorgtfo
-  #   restart: unless-stopped
+  #   restart: always
   #   environment:
   #     - TS_STATE_DIR=/var/lib/tailscale/
   #   volumes:

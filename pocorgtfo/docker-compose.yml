@@ -10,11 +10,11 @@ services:
       - ./caddy-www:/var/www
       - ./caddy-file/Caddyfile:/etc/caddy/Caddyfile
       - ./tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
-    restart: unless-stopped
+    restart: always
   tailscaled:
     image: tailscale/tailscale:latest
     container_name: tailscaled-pocorgtfo
-    restart: unless-stopped
+    restart: always
     environment:
       - TS_STATE_DIR=/var/lib/tailscale/
     volumes:

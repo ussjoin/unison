@@ -13,11 +13,11 @@ services:
     volumes:
       - ./calibre-web-config:/config
       - ./books:/books
-    restart: unless-stopped
+    restart: always
   tailscaled:
     image: tailscale/tailscale
     container_name: tailscaled-calibre
-    restart: unless-stopped
+    restart: always
     depends_on:
       - calibre-web
     environment:
@@ -30,7 +30,7 @@ services:
   caddy-calibre:
     image: caddy:alpine
     container_name: caddy-calibre
-    restart: unless-stopped
+    restart: always
     depends_on:
       - calibre-web
     network_mode: "container:calibre"
