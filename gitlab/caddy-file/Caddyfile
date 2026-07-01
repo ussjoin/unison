@@ -1,9 +1,0 @@
-gitlab.hippo-acoustic.ts.net
-
-reverse_proxy gitlab.hippo-acoustic.ts.net {
-    to localhost:81
-}
-
-reverse_proxy gitlab.hippo-acoustic.ts.net:5002 {
-    to localhost:5001
-}
