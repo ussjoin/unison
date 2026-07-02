@@ -2,6 +2,8 @@ FROM alpine
 
 RUN mkdir /app
 
+RUN apk upgrade
+
 RUN apk add \
   rtl-sdr \
   librtlsdr \
