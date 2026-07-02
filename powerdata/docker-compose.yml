@@ -24,8 +24,6 @@ services:
       - /dev/net/tun:/dev/net/tun
       - ./tailscale-data:/var/lib/tailscale
     network_mode: "container:traefik-power"
-    depends_on:
-      - traefik
   traefik:
     image: traefik:latest
     container_name: traefik-power
