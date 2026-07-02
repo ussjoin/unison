@@ -1,0 +1,45 @@
+networks:
+  forgejo:
+    external: false
+
+services:
+  forgejo:
+    image: codeberg.org/forgejo/forgejo:15
+    container_name: forgejo
+    hostname: git
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    restart: always
+    networks:
+      - forgejo
+    volumes:
+      - ./forgejo-data:/data
+      - /etc/localtime:/etc/localtime:ro
+  tailscaled:
+    image: tailscale/tailscale
+    container_name: tailscaled-forgejo
+    restart: always
+    depends_on:
+      - forgejo
+    environment:
+      - TS_STATE_DIR=/var/lib/tailscale
+    volumes:
+      - /dev/net/tun:/dev/net/tun
+      - ./tailscale-data:/var/lib/tailscale
+      - ./tailscale-tmp:/tmp #To let Caddy speak to TS for TLS
+    network_mode: "container:forgejo"
+
+  caddy:
+    image: caddy:alpine
+    container_name: forgejo-caddy
+    restart: always
+    depends_on:
+      - forgejo
+    network_mode: "container:forgejo"
+    volumes:
+      - ./caddy-data:/data
+      - ./caddy-config:/config
+      - ./caddy-file/Caddyfile:/etc/caddy/Caddyfile
+      - ./tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
+
