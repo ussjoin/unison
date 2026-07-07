@@ -1,4 +1,3 @@
-version: '3'
 services:
   pocorgtfo:
     container_name: pocorgtfo

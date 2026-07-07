@@ -1,4 +1,3 @@
-version: '3'
 services:
   power-influx:
     container_name: power-influx

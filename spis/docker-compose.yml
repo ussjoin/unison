@@ -7,7 +7,6 @@
 # 5. In that session, run tailscale funnel -bg --https=443 http://localhost:8080
 # 6. This will bring the funnel online and make it persistent. If you need to
 #    debug the funnel, drop the -bg to put it in foreground mode.
-version: '3'
 services:
   spis:
     container_name: spis

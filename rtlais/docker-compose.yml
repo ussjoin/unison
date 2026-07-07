@@ -1,4 +1,3 @@
-version: '3'
 services:
   rtlais:
     container_name: rtlais
