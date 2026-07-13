@@ -1,0 +1,3 @@
+kuma.hippo-acoustic.ts.net {
+    reverse_proxy http://localhost:3001
+}
