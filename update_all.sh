@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eux pipefail
 
-for f in calibre-web forgejo grafana immich matrix pocorgtfo powerdata spis uptime-kuma;
+for f in archivewarrior calibre-web forgejo grafana immich matrix pocorgtfo powerdata spis uptime-kuma;
 do
 	cd /mnt/containers/$f
 	docker compose pull && docker compose down && docker compose up -d
