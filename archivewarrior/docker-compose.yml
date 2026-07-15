@@ -1,3 +1,5 @@
+# authkey should advertise tag `https`
+
 services:
   archivewarrior:
     image: atdr.meo.ws/archiveteam/warrior-dockerfile
@@ -12,10 +14,11 @@ services:
     restart: always
     environment:
       - TS_STATE_DIR=/var/lib/tailscale/
+      - TS_AUTHKEY=${TS_AUTHKEY:-bad_auth_key}
     volumes:
       - /dev/net/tun:/dev/net/tun
-      - ./tailscale-data:/var/lib/tailscale
-      - ./tailscale-tmp:/tmp #To let Caddy speak to TS for TLS
+      - archivewarrior-tailscale-data:/var/lib/tailscale
+      - archivewarrior-tailscale-tmp:/tmp #To let Caddy speak to TS for TLS
     network_mode: "container:archivewarrior"
     depends_on:
       - archivewarrior
@@ -27,8 +30,13 @@ services:
       - archivewarrior
     network_mode: "container:archivewarrior"
     volumes:
-      - ./caddy-data:/data
-      - ./caddy-config:/config
+      - archivewarrior-caddy-data:/data
+      - archivewarrior-caddy-config:/config
       - ./caddy-file/Caddyfile:/etc/caddy/Caddyfile
-      - ./tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
+      - archivewarrior-tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
+volumes:
+  archivewarrior-caddy-config:
+  archivewarrior-caddy-data:
+  archivewarrior-tailscale-data:
+  archivewarrior-tailscale-tmp:
 
