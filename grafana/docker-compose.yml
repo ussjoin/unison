@@ -32,7 +32,7 @@ services:
     restart: always
     user: '1000'
     volumes:
-      - ./grafana-data:/var/lib/grafana
+      - grafana-data:/var/lib/grafana
   tailscaled:
     image: tailscale/tailscale:latest
     container_name: tailscaled-grafana
@@ -41,8 +41,13 @@ services:
       - TS_STATE_DIR=/var/lib/tailscale/
     volumes:
       - /dev/net/tun:/dev/net/tun
-      - ./tailscale-data:/var/lib/tailscale
+      - tailscale-data:/var/lib/tailscale
     network_mode: "container:grafana"
     depends_on:
       - grafana
-  
+volumes:
+  grafana-data:
+    name: "grafana_grafana-data"
+  tailscale-data:
+    name: "grafana_tailscale-data"
+
