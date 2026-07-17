@@ -1,3 +1,4 @@
+# authkey should advertise tag `https`
 ---
 services:
   calibre-web:
@@ -10,7 +11,7 @@ services:
       - TZ=America/Los_Angeles
       - DOCKER_MODS=linuxserver/mods:universal-calibre #optional
     volumes:
-      - ./calibre-web-config:/config
+      - calibre-web-config:/config
       - ./books:/books
     restart: always
   tailscaled:
@@ -21,10 +22,11 @@ services:
       - calibre-web
     environment:
       - TS_STATE_DIR=/var/lib/tailscale
+      - TS_AUTHKEY=${TS_AUTHKEY:-bad_auth_key}
     volumes:
       - /dev/net/tun:/dev/net/tun
-      - ./tailscale-data:/var/lib/tailscale
-      - ./tailscale-tmp:/tmp #To let Caddy speak to TS for TLS
+      - tailscale-data:/var/lib/tailscale
+      - tailscale-tmp:/tmp #To let Caddy speak to TS for TLS
     network_mode: "container:calibre"
   caddy-calibre:
     image: caddy:alpine
@@ -34,7 +36,18 @@ services:
       - calibre-web
     network_mode: "container:calibre"
     volumes:
-      - ./caddy-data:/data
-      - ./caddy-config:/config
+      - caddy-data:/data
+      - caddy-config:/config
       - ./caddy-file/Caddyfile:/etc/caddy/Caddyfile
-      - ./tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
+      - tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
+volumes:
+  caddy-config:
+    name: "calibre-web_calibre-caddy-config"
+  caddy-data:
+    name: "calibre-web_calibre-caddy-data"
+  calibre-web-config:
+    name: "calibre-web_calibre-calibre-web-config"
+  tailscale-data:
+    name: "calibre-web_calibre-tailscale-data"
+  tailscale-tmp:
+    name: "calibre-web_calibre-tailscale-tmp"
