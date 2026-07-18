@@ -1,3 +1,5 @@
+# Tailscale Authkey must advertise tag `https`
+
 services:
   immich:
     container_name: immich
@@ -63,10 +65,11 @@ services:
       - immich
     environment:
       - TS_STATE_DIR=/var/lib/tailscale
+      - TS_AUTHKEY=${TS_AUTHKEY:-bad_auth_key}
     volumes:
       - /dev/net/tun:/dev/net/tun
-      - ./tailscale-data:/var/lib/tailscale
-      - ./tailscale-tmp:/tmp #To let Caddy speak to TS for TLS
+      - tailscale-data:/var/lib/tailscale
+      - tailscale-tmp:/tmp #To let Caddy speak to TS for TLS
     network_mode: "container:immich"
 
   caddy:
@@ -77,10 +80,19 @@ services:
       - immich
     network_mode: "container:immich"
     volumes:
-      - ./caddy-data:/data
-      - ./caddy-config:/config
+      - caddy-data:/data
+      - caddy-config:/config
       - ./caddy-file/Caddyfile:/etc/caddy/Caddyfile
-      - ./tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
+      - tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
 
 volumes:
-  model-cache:
+  model-cache: # This never has data we care about
+  caddy-config:
+    name: "immich_caddy-config"
+  caddy-data:
+    name: "immich_caddy-data"
+  tailscale-data:
+    name: "immich_tailscale-data"
+  tailscale-tmp:
+    name: "immich_tailscale-tmp"
+
