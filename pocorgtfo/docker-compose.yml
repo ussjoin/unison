@@ -1,14 +1,16 @@
+# Authkey should tag this as `https`
+
 services:
   pocorgtfo:
     container_name: pocorgtfo
     hostname: pocorgtfo
     image: caddy:alpine
     volumes:
-      - ./caddy-data:/data
-      - ./caddy-config:/config
+      - caddy-data:/data
+      - caddy-config:/config
       - ./caddy-www:/var/www
       - ./caddy-file/Caddyfile:/etc/caddy/Caddyfile
-      - ./tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
+      - tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
     restart: always
   tailscaled:
     image: tailscale/tailscale:latest
@@ -16,10 +18,19 @@ services:
     restart: always
     environment:
       - TS_STATE_DIR=/var/lib/tailscale/
+      - TS_AUTHKEY=${TS_AUTHKEY:-bad_auth_key}
     volumes:
       - /dev/net/tun:/dev/net/tun
-      - ./tailscale-tmp:/tmp #To let Caddy speak to TS for TLS
-      - ./tailscale-data:/var/lib/tailscale
+      - tailscale-tmp:/tmp #To let Caddy speak to TS for TLS
+      - tailscale-data:/var/lib/tailscale
     network_mode: "container:pocorgtfo"
-
+volumes:
+  caddy-config:
+    name: "pocorgtfo_caddy-config"
+  caddy-data:
+    name: "pocorgtfo_caddy-data"
+  tailscale-data:
+    name: "pocorgtfo_tailscale-data"
+  tailscale-tmp:
+    name: "pocorgtfo_tailscale-tmp"
 
