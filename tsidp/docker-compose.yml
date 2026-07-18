@@ -1,3 +1,5 @@
+# Authkey should avertise tags `https`, `infrastructure`, `tsidp`
+
 services:
   tsidp:
     container_name: tsidp
@@ -9,5 +11,6 @@ services:
       - TS_STATE_DIR=/data # store persistent tsnet and tsidp state
       - TS_HOSTNAME=tsidp # Hostname on tailnet (becomes idp.your-tailnet.ts.net)
       - TSIDP_ENABLE_STS=1 # Enable OAuth token exchange
+      - TS_AUTHKEY=${TS_AUTHKEY:-bad_auth_key}
 volumes:
   tsidp-data:
