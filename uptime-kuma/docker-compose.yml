@@ -1,3 +1,4 @@
+# Authkey should advertise tags `https` and `infrastructure`
 services:
   kuma:
     image: louislam/uptime-kuma:2
@@ -14,10 +15,11 @@ services:
       - kuma
     environment:
       - TS_STATE_DIR=/var/lib/tailscale
+      - TS_AUTHKEY=${TS_AUTHKEY:-bad_auth_key}
     volumes:
       - /dev/net/tun:/dev/net/tun
-      - ./tailscale-data:/var/lib/tailscale
-      - ./tailscale-tmp:/tmp #To let Caddy speak to TS for TLS
+      - tailscale-data:/var/lib/tailscale
+      - tailscale-tmp:/tmp #To let Caddy speak to TS for TLS
     network_mode: "container:kuma"
 
   caddy:
@@ -28,7 +30,16 @@ services:
       - kuma
     network_mode: "container:kuma"
     volumes:
-      - ./caddy-data:/data
-      - ./caddy-config:/config
+      - caddy-data:/data
+      - caddy-config:/config
       - ./caddy-file/Caddyfile:/etc/caddy/Caddyfile
-      - ./tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
+      - tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
+volumes:
+  caddy-config:
+    name: "uptime-kuma_caddy-config"
+  caddy-data:
+    name: "uptime-kuma_caddy-data"
+  tailscale-data:
+    name: "uptime-kuma_tailscale-data"
+  tailscale-tmp:
+    name: "uptime-kuma_tailscale-tmp"
