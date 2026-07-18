@@ -1,3 +1,5 @@
+# Authkey needs to advertise tag `funnel`
+
 # To bring the tailscale funnel online:
 # 1. docker compose up (no -d)
 # 2. The tailscale container on first start will display a URL to join the
@@ -18,7 +20,7 @@ services:
       MARIADB_USER: wavelog
       MARIADB_PASSWORD_HASH: "*03403BCD8A2E6279D2D116639DE31E81170A2EAF"
     volumes:
-      - ./wavelog-dbdata:/var/lib/mysql
+      - wavelog-dbdata:/var/lib/mysql
       - ./wavelog-backup:/backup
     restart: always
 
@@ -32,8 +34,8 @@ services:
       CI_ENV: docker
     volumes:
       - ./wavelog-config:/var/www/html/application/config/docker
-      - ./wavelog-uploads:/var/www/html/uploads
-      - ./wavelog-userdata:/var/www/html/userdata
+      - wavelog-uploads:/var/www/html/uploads
+      - wavelog-userdata:/var/www/html/userdata
     restart: always
 
   tailscaled:
@@ -42,10 +44,20 @@ services:
     restart: always
     environment:
       - TS_STATE_DIR=/var/lib/tailscale/
+      - TS_AUTHKEY=${TS_AUTHKEY:-bad_auth_key}
     volumes:
       - /dev/net/tun:/dev/net/tun
-      - ./tailscale-data:/var/lib/tailscale
+      - tailscale-data:/var/lib/tailscale
     network_mode: "container:wavelog-main"
     depends_on:
       - wavelog-main
+volumes:
+  tailscale-data:
+    name: "wavelog_tailscale-data"
+  wavelog-uploads:
+    name: "wavelog_wavelog-uploads"
+  wavelog-userdata:
+    name: "wavelog_wavelog-userdata"
+  wavelog-dbdata:
+    name: "wavelog_wavelog-dbdata"
 
