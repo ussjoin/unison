@@ -49,7 +49,7 @@ services:
       - homeserver 
 volumes:
   tailscale-data:
-    name: "pocorgtfo_tailscale-data"
+    name: "matrix_tailscale-data"
   continuwuity-data:
     name: "matrix_continuwuity-data"
 
