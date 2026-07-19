@@ -1,3 +1,5 @@
+# Authkey needs to tag `https` and `ssh` (the latter for git via SSH)
+
 networks:
   forgejo:
     external: false
@@ -14,7 +16,7 @@ services:
     networks:
       - forgejo
     volumes:
-      - ./forgejo-data:/data
+      - forgejo-data:/data
       - /etc/localtime:/etc/localtime:ro
   tailscaled:
     image: tailscale/tailscale
@@ -24,10 +26,11 @@ services:
       - forgejo
     environment:
       - TS_STATE_DIR=/var/lib/tailscale
+      - TS_AUTHKEY=${TS_AUTHKEY:-bad_auth_key}
     volumes:
       - /dev/net/tun:/dev/net/tun
-      - ./tailscale-data:/var/lib/tailscale
-      - ./tailscale-tmp:/tmp #To let Caddy speak to TS for TLS
+      - tailscale-data:/var/lib/tailscale
+      - tailscale-tmp:/tmp #To let Caddy speak to TS for TLS
     network_mode: "container:forgejo"
 
   caddy:
@@ -38,8 +41,18 @@ services:
       - forgejo
     network_mode: "container:forgejo"
     volumes:
-      - ./caddy-data:/data
-      - ./caddy-config:/config
+      - caddy-data:/data
+      - caddy-config:/config
       - ./caddy-file/Caddyfile:/etc/caddy/Caddyfile
-      - ./tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
-
+      - tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
+volumes:
+  forgejo-data:
+    name: "forgejo_forgejo-data"
+  caddy-config:
+    name: "forgejo_caddy-config"
+  caddy-data:
+    name: "forgejo_caddy-data"
+  tailscale-data:
+    name: "forgejo_tailscale-data"
+  tailscale-tmp:
+    name: "forgejo_tailscale-tmp"
