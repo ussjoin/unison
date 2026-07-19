@@ -1,48 +1,56 @@
-# Authkey should tag `influxdb`
+# Authkey should tag `https`
 # On restore from backup/git: update influxdb-config/influx-configs with data from 1Password
+# If migrating this service to a new host, the following systems connect locally via HTTP
+#   on port 37678, not via Tailscale (so they'll need to be re-pointed):
+#   - homeassistant
+#   - watt1
+#   - watt2
 
 services:
-  power-influx:
-    container_name: power-influx
+  influxdb:
+    container_name: influxdb
+    hostname: "influxdb"
+    ports:
+      - 37678:8086 # Allows local non-Tailscale non-TLS-capable devices to send data into Influx
     image: "influxdb:2-alpine"
     volumes:
       - influxdb-data:/var/lib/influxdb2
       - ./influxdb-config:/etc/influxdb2
     restart: always
-    labels:
-      - "traefik.http.routers.power-influx.rule=(ClientIP(`192.168.86.250`) || ClientIP(`192.168.86.97`) || ClientIP(`192.168.86.20`) || ClientIP(`192.168.90.12`) || ClientIP(`192.168.90.11`) || ClientIP(`172.16.0.0/12`) || Host(`influxdb.hippo-acoustic.ts.net`) || Host(`localhost`))"
-      - "traefik.http.services.power-influx.loadbalancer.server.port=8086"
-      - "traefik.http.routers.power-influx.entrypoints=infl"
-      - "traefik.enable=true"
   tailscale-power:
     image: tailscale/tailscale
     container_name: tailscaled-power
     restart: always
     depends_on:
-      - traefik
+      - influxdb
     environment:
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_AUTHKEY=${TS_AUTHKEY:-bad_auth_key}
     volumes:
       - /dev/net/tun:/dev/net/tun
       - tailscale-data:/var/lib/tailscale
-    network_mode: "container:traefik-power"
-  traefik:
-    image: traefik:latest
-    container_name: traefik-power
-    hostname: influxdb
+      - tailscale-tmp:/tmp #To let Caddy speak to TS for TLS
+    network_mode: "container:influxdb"
+  caddy:
+    image: caddy:alpine
+    container_name: influxdb-caddy
     restart: always
-    command:
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.infl.address=:37678"
-    ports:
-      - "37678:37678"
+    depends_on:
+      - influxdb
+    network_mode: "container:influxdb"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy-data:/data
+      - caddy-config:/config
+      - ./caddy-file/Caddyfile:/etc/caddy/Caddyfile
+      - tailscale-tmp:/var/run/tailscale #To let Caddy speak to TS for TLS
 volumes:
   tailscale-data:
     name: "powerdata_tailscale-data"
+  tailscale-tmp:
+    name: "powerdata_tailscale-tmp"
   influxdb-data:
     name: "powerdata_influxdb-data"
-
+  caddy-data:
+    name: "powerdata_caddy-data"
+  caddy-config:
+    name: "powerdata_caddy-config"
