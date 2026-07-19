@@ -1,0 +1,6 @@
+[default]
+  url = "http://localhost:8086"
+  token = "GET_FROM_1PASSWORD"
+  org = "oconnor"
+  active = true
+
