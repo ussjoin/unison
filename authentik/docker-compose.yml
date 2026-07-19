@@ -1,3 +1,5 @@
+# Authkey should tag `funnel` and `infrastructure`
+
 # To bring the tailscale funnel online:
 # 1. docker compose up (no -d)
 # 2. The tailscale container on first start will display a URL to join the
@@ -27,7 +29,7 @@ services:
     image: docker.io/library/postgres:16-alpine
     restart: unless-stopped
     volumes:
-    - ./postgres-data:/var/lib/postgresql/data
+    - postgres-data:/var/lib/postgresql/data
   auth:
     hostname: "auth"
     container_name: "auth"
@@ -47,8 +49,8 @@ services:
     restart: unless-stopped
     shm_size: 512mb
     volumes:
-    - ./authentik-data:/data
-    - ./authentik-templates:/templates
+    - authentik-data:/data
+    - authentik-templates:/templates
   worker:
     command: worker
     depends_on:
@@ -67,18 +69,31 @@ services:
     shm_size: 512mb
     user: root
     volumes:
-    - ./authentik-data:/data
-    - ./authentik-certs:/certs
-    - ./authentik-templates:/templates
+    - authentik-data:/data
+    - authentik-certs:/certs
+    - authentik-templates:/templates
   tailscaled:
     image: tailscale/tailscale:latest
     container_name: tailscaled-authentik
     restart: always
     environment:
       - TS_STATE_DIR=/var/lib/tailscale/
+      - TS_AUTHKEY=${TS_AUTHKEY:-bad_auth_key}
     volumes:
       - /dev/net/tun:/dev/net/tun
-      - ./tailscale-data:/var/lib/tailscale
+      - tailscale-data:/var/lib/tailscale
     network_mode: "container:auth"
     depends_on:
       - auth
+volumes:
+  tailscale-data:
+    name: "authentik_tailscale-data"
+  authentik-data:
+    name: "authentik_authentik-data"
+  authentik-certs:
+    name: "authentik_authentik-certs"
+  authentik-templates:
+    name: "authentik_authentik-templates"
+  postgres-data:
+    name: "authentik_postgres-data"
+
