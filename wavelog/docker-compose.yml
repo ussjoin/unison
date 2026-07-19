@@ -1,5 +1,10 @@
 # Authkey needs to advertise tag `funnel`
 
+# On restore from backup, edit database.php and config.php
+# Look for the string "1PASSWORD" and replace the mariadb pw,
+# hamqth pw, and encryption key. For obvious reasons those aren't
+# in Git.
+
 # To bring the tailscale funnel online:
 # 1. docker compose up (no -d)
 # 2. The tailscale container on first start will display a URL to join the
