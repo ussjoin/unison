@@ -1,3 +1,5 @@
+# Authkey must tag `funnel`
+
 # Continuwuity
 # To bring the tailscale funnel online:
 # 1. docker compose up (no -d)
@@ -16,7 +18,7 @@ services:
     hostname: matrix
     container_name: matrix
     volumes:
-      - ./continuwuity-data:/var/lib/continuwuity
+      - continuwuity-data:/var/lib/continuwuity
       - ./continuwuity-config/continuwuity.toml:/etc/continuwuity.toml
     environment:
       CONTINUWUITY_SERVER_NAME: ussjoin.com
@@ -38,10 +40,16 @@ services:
     restart: always
     environment:
       - TS_STATE_DIR=/var/lib/tailscale/
+      - TS_AUTHKEY=${TS_AUTHKEY:-bad_auth_key}
     volumes:
       - /dev/net/tun:/dev/net/tun
-      - ./tailscale-data:/var/lib/tailscale
+      - tailscale-data:/var/lib/tailscale
     network_mode: "container:matrix"
     depends_on:
       - homeserver 
+volumes:
+  tailscale-data:
+    name: "pocorgtfo_tailscale-data"
+  continuwuity-data:
+    name: "matrix_continuwuity-data"
 
