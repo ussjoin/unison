@@ -1,4 +1,5 @@
 # Authkey should tag `influxdb`
+# On restore from backup/git: update influxdb-config/influx-configs with data from 1Password
 
 services:
   power-influx:
