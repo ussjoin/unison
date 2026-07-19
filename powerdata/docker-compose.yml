@@ -1,13 +1,15 @@
+# Authkey should tag `influxdb`
+
 services:
   power-influx:
     container_name: power-influx
     image: "influxdb:2-alpine"
     volumes:
-      - ./influxdb-data:/var/lib/influxdb2
+      - influxdb-data:/var/lib/influxdb2
       - ./influxdb-config:/etc/influxdb2
     restart: always
     labels:
-      - "traefik.http.routers.power-influx.rule=(ClientIP(`192.168.86.250`) || ClientIP(`192.168.86.20`) || ClientIP(`192.168.90.12`) || ClientIP(`192.168.90.11`) || Host(`influxdb.hippo-acoustic.ts.net`) || Host(`localhost`))"
+      - "traefik.http.routers.power-influx.rule=(ClientIP(`192.168.86.250`) || ClientIP(`192.168.86.97`) || ClientIP(`192.168.86.20`) || ClientIP(`192.168.90.12`) || ClientIP(`192.168.90.11`) || ClientIP(`172.16.0.0/12`) || Host(`influxdb.hippo-acoustic.ts.net`) || Host(`localhost`))"
       - "traefik.http.services.power-influx.loadbalancer.server.port=8086"
       - "traefik.http.routers.power-influx.entrypoints=infl"
       - "traefik.enable=true"
@@ -19,9 +21,10 @@ services:
       - traefik
     environment:
       - TS_STATE_DIR=/var/lib/tailscale
+      - TS_AUTHKEY=${TS_AUTHKEY:-bad_auth_key}
     volumes:
       - /dev/net/tun:/dev/net/tun
-      - ./tailscale-data:/var/lib/tailscale
+      - tailscale-data:/var/lib/tailscale
     network_mode: "container:traefik-power"
   traefik:
     image: traefik:latest
@@ -36,4 +39,9 @@ services:
       - "37678:37678"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+volumes:
+  tailscale-data:
+    name: "powerdata_tailscale-data"
+  influxdb-data:
+    name: "powerdata_influxdb-data"
 
