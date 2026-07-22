@@ -16,6 +16,7 @@ declare -A applications=( \
 	["matrix"]="continuwuity-data" \
 	["pocorgtfo"]="" \
 	["powerdata"]="" \
+	["spis"]="" \
 	["tsidp"]="tsidp-data" \
 	["uptime-kuma"]="" \
 	["wavelog"]="wavelog-uploads wavelog-userdata" 
