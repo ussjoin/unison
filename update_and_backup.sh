@@ -12,7 +12,7 @@ declare -A applications=( \
 	["calibre-web"]="calibre-calibre-web-config" \
 	["forgejo"]="" \
 	["grafana"]="grafana-data" \
-	["immich"]="" \
+	["immich"]="postgres-data" \
 	["matrix"]="continuwuity-data" \
 	["pocorgtfo"]="" \
 	["powerdata"]="" \
@@ -73,24 +73,6 @@ do
 
 	echo "${NAME_OF_SERVICE}: terminating containers."
 	docker compose down
-
-	# This special needs to run while the service is down, as that's the only allowed way to do a Postgres
-	# filesystem backup; otherwise it'll be inconsistent. See generally https://www.postgresql.org/docs/current/backup-file.html.
-	# Why Immich *vocally* insists on using a bind mount for its postgres data isn't clear, but I get that
-	# impression from the comments at https://github.com/immich-app/immich/blob/main/docker/example.env#L6-L7 .
-	# Note that Immich photos are backed up completely separately.
-	if [ "${NAME_OF_SERVICE}" = "immich" ]; then
-		echo "${NAME_OF_SERVICE}: beginning special Immich backup process."
-
-		# Create the backup in the appropriate folder.
-		mkdir -p ./backups
-		BACKUPFILE=${NAME_OF_SERVICE}-postgres-data-${DATE_OF_BACKUP}
-		sudo tar -czf ./backups/${BACKUPFILE}.tgz ./postgres-data
-		sudo chown $(whoami) ./backups/${BACKUPFILE}.tgz
-
-		NUMBER_OF_BACKUPS=$((${NUMBER_OF_BACKUPS}+1))
-		echo "${NAME_OF_SERVICE}: ending special Immich backup process."
-	fi
 
 	if [ "${NUMBER_OF_BACKUPS}" -gt "0" ]; then
 	    # Take backup
