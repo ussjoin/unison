@@ -18,7 +18,7 @@ declare -A applications=( \
 	["powerdata"]="" \
 	["spis"]="" \
 	["tsidp"]="tsidp-data" \
-	["uptime-kuma"]="" \
+	["uptime-kuma"]="kuma-data" \
 	["wavelog"]="wavelog-uploads wavelog-userdata" 
 )
 

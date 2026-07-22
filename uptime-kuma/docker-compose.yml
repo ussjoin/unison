@@ -6,7 +6,7 @@ services:
     hostname: "kuma"
     container_name: kuma
     volumes:
-      - ./kuma-data:/app/data
+      - kuma-data:/app/data
   tailscaled:
     image: tailscale/tailscale
     container_name: tailscaled-kuma
@@ -43,3 +43,5 @@ volumes:
     name: "uptime-kuma_tailscale-data"
   tailscale-tmp:
     name: "uptime-kuma_tailscale-tmp"
+  kuma-data:
+    name: "uptime-kuma_kuma-data"
