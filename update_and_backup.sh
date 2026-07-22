@@ -86,7 +86,7 @@ do
 		mkdir -p ./backups
 		BACKUPFILE=${NAME_OF_SERVICE}-postgres-data-${DATE_OF_BACKUP}
 		sudo tar -czf ./backups/${BACKUPFILE}.tgz ./postgres-data
-		sudo chown $USER ./backups/${BACKUPFILE}.tgz
+		sudo chown $(whoami) ./backups/${BACKUPFILE}.tgz
 
 		NUMBER_OF_BACKUPS=$((${NUMBER_OF_BACKUPS}+1))
 		echo "${NAME_OF_SERVICE}: ending special Immich backup process."
