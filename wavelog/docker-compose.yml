@@ -26,7 +26,6 @@ services:
       MARIADB_PASSWORD_HASH: "*03403BCD8A2E6279D2D116639DE31E81170A2EAF"
     volumes:
       - wavelog-dbdata:/var/lib/mysql
-      - ./wavelog-backup:/backup
     restart: always
 
   wavelog-main:
