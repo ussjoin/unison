@@ -1,0 +1,10 @@
+services:
+  futoin:
+    container_name: futoin
+    hostname: futoin
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - ./config.ini:/usr/src/app/config.ini

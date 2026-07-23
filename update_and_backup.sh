@@ -11,6 +11,7 @@ declare -A applications=( \
 	["archivewarrior"]="" \
 	["calibre-web"]="calibre-calibre-web-config" \
 	["forgejo"]="" \
+	["futoin"]="" \
 	["grafana"]="grafana-data" \
 	["immich"]="postgres-data" \
 	["matrix"]="continuwuity-data" \
@@ -68,13 +69,13 @@ do
 		echo "${NAME_OF_SERVICE}: ending special Forgejo backup process."
 	fi
 
-	if [ "${NAME_OF_SERVICE}" = "yotoin" ]; then
-		echo "${NAME_OF_SERVICE}: beginning special Yotoin update process."
-		# Yotoin just needs to be built locally, not pulled.
+	if [ "${NAME_OF_SERVICE}" = "yotoin" ] || [ "${NAME_OF_SERVICE}" = "futoin" ]; then
+		echo "${NAME_OF_SERVICE}: beginning special Yotoin/Futoin update process."
+		# Yotoin/Futoin just need to be built locally, not pulled.
 		
 		docker compose build --no-cache
 
-		echo "${NAME_OF_SERVICE}: ending special Yotoin update process."
+		echo "${NAME_OF_SERVICE}: ending special Yotoin/Futoin update process."
 	fi
 
 
@@ -127,8 +128,11 @@ do
 		echo "${NAME_OF_SERVICE}: Trim complete."
 	fi
 
-	# Bring service up
-	docker compose up -d
+	# Bring service up (except Futoin, which is a cron-launched thing)
+	if [ "${NAME_OF_SERVICE}" != "futoin" ]; then
+		docker compose up -d
+	fi
+	
 
 	echo "${NAME_OF_SERVICE}: completing backup and update."
 done
