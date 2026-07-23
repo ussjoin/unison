@@ -1,0 +1,3 @@
+[submodule "yotoin"]
+	path = yotoin
+	url = ssh://git@git.hippo-acoustic.ts.net/ussjoin/yolink_to_influx.git

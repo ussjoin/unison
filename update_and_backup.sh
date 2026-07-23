@@ -19,7 +19,8 @@ declare -A applications=( \
 	["spis"]="" \
 	["tsidp"]="tsidp-data" \
 	["uptime-kuma"]="kuma-data" \
-	["wavelog"]="wavelog-uploads wavelog-userdata" 
+	["wavelog"]="wavelog-uploads wavelog-userdata" \
+	["yotoin"]="" 
 )
 
 DAYS_TO_KEEP=90
@@ -65,6 +66,15 @@ do
 
 		NUMBER_OF_BACKUPS=$((${NUMBER_OF_BACKUPS}+1))
 		echo "${NAME_OF_SERVICE}: ending special Forgejo backup process."
+	fi
+
+	if [ "${NAME_OF_SERVICE}" = "yotoin" ]; then
+		echo "${NAME_OF_SERVICE}: beginning special Yotoin update process."
+		# Yotoin just needs to be built locally, not pulled.
+		
+		docker compose build --no-cache
+
+		echo "${NAME_OF_SERVICE}: ending special Yotoin update process."
 	fi
 
 
