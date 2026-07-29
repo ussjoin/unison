@@ -26,6 +26,8 @@ declare -A applications=( \
 
 DAYS_TO_KEEP=90
 
+HOSTNAME=$(hostname)
+
 for NAME_OF_SERVICE in "${!applications[@]}"
 do
 	echo "${NAME_OF_SERVICE}: beginning backup and update."
@@ -49,7 +51,7 @@ do
 
 		# Take the backup and move it to the appropriate folder.
 		mkdir -p ./backups
-		BACKUPFILE=${NAME_OF_SERVICE}-mariadb-backup-${DATE_OF_BACKUP}
+		BACKUPFILE=${NAME_OF_SERVICE}-mariadb-backup-${DATE_OF_BACKUP}-${HOSTNAME}
 		tar -czf ./backups/${BACKUPFILE}.tgz ./wavelog_backup.sql
 		rm wavelog_backup.sql
 		NUMBER_OF_BACKUPS=$((${NUMBER_OF_BACKUPS}+1))
@@ -62,7 +64,7 @@ do
 
 		# Create the backup in the appropriate folder.
 		mkdir -p ./backups
-		BACKUPFILE=${NAME_OF_SERVICE}-dump-${DATE_OF_BACKUP}
+		BACKUPFILE=${NAME_OF_SERVICE}-dump-${DATE_OF_BACKUP}-${HOSTNAME}
 		docker compose exec -ti --user git forgejo forgejo dump --type tar.gz -f - > ./backups/${BACKUPFILE}.tgz
 
 		NUMBER_OF_BACKUPS=$((${NUMBER_OF_BACKUPS}+1))
@@ -94,7 +96,7 @@ do
 
 		for VOLUME in ${BACKUP_FOLDERS}
 		do
-			BACKUPFILE=${NAME_OF_SERVICE}-$VOLUME-${DATE_OF_BACKUP}
+			BACKUPFILE=${NAME_OF_SERVICE}-$VOLUME-${DATE_OF_BACKUP}-${HOSTNAME}
 			docker run --rm \
 			-v ${NAME_OF_SERVICE}_${VOLUME}:/tmp/${BACKUPFILE} \
 			-v ./backups:/tmp/backups \
