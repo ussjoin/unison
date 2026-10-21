@@ -115,15 +115,15 @@ do
 
 		# Doing the trim on both sides avoids having to do an rsync for this degenerate case,
 		# and it doesn't cause copying of extra data.
-		# And rsync has gone LLM slop, sadly. So lt's do that.
+		# And rsync has gone LLM slop, sadly. So let's do that.
 
 		# Breaking up the bash one-liner to avoid having pipefail trigger when there are no files to remove.
 		# tail -n needs a +1, see the man page.
 		REMOVE_FILES=$(ls -1 ./backups | sort -r | tail -n +$((${NUMBER_OF_FILES_TO_KEEP} + 1)))
 		REMOVE_FILES2=$(ls -1 ${BACKUP_SYNC_FOLDER} | sort -r | tail -n +$((${NUMBER_OF_FILES_TO_KEEP} - ${NUMBER_OF_BACKUPS} + 1)))
 		if [ "$(echo $REMOVE_FILES | wc -w)" -gt "0" ]; then
-			echo $REMOVE_FILES | xargs rm > /dev/null 2>&1
-			echo $REMOVE_FILES2 | xargs rm > /dev/null 2>&1
+			echo -e "$REMOVE_FILES" | xargs -I % rm ./backups/% > /dev/null 2>&1
+			echo -e "$REMOVE_FILES2" | xargs -I % rm ${BACKUP_SYNC_FOLDER}/% > /dev/null 2>&1
 		fi
 
 		cp ./backups/* ${BACKUP_SYNC_FOLDER}
