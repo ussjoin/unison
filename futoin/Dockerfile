@@ -8,6 +8,7 @@ FROM python:3-alpine
 WORKDIR /usr/src/app
 
 RUN apk update && apk upgrade
+RUN apk add gcc musl-dev
 
 COPY python/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
