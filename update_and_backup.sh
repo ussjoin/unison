@@ -41,6 +41,7 @@ do
 	if [ "${NAME_OF_SERVICE}" = "wavelog" ]; then
 		echo "${NAME_OF_SERVICE}: beginning special Wavelog backup process."
 		docker compose up -d # Needs to be running to do the backup; this command succeeds if it's already running.
+		sleep 5 # Give mariadb a chance to wake up or the backup fails
 		set +x
 		source .env
 		# This next line is cheating.
